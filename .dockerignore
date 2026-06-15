@@ -4,4 +4,5 @@
 .github
 .idea
 *.db
+!Lab13sardonmax/ticketera-lab13.db
 README-LAB14.md

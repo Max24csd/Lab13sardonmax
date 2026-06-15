@@ -73,10 +73,14 @@ despliegue automático desde el repositorio.
 
 ## Nota sobre SQLite
 
-SQLite es suficiente para esta demostración porque la base se crea y se llena
-con datos iniciales al arrancar. En el plan gratuito de Render, los cambios
-hechos al archivo local no son permanentes después de un reinicio. Para una
-aplicación real se debe usar Render Postgres o un disco persistente de pago.
+La base `Lab13sardonmax/ticketera-lab13.db` está incluida en GitHub, se copia
+durante `dotnet publish` y forma parte de la imagen Docker desplegada en Render.
+La aplicación también comprueba y crea su estructura al arrancar.
+
+En el plan gratuito de Render, el sistema de archivos es temporal. La base
+inicial vuelve a desplegarse con la aplicación, pero los cambios realizados en
+línea no permanecen después de un reinicio. Para persistencia real se debe usar
+Render Postgres o un disco persistente de pago.
 
 ## Conclusiones sugeridas
 

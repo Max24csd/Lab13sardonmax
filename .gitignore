@@ -6,6 +6,7 @@ publicado/
 *.user
 *.suo
 *.db
+!Lab13sardonmax/ticketera-lab13.db
 *.db-shm
 *.db-wal
 TestResults/
