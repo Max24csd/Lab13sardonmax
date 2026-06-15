@@ -1,0 +1,185 @@
+@page "/"
+@using Lab13sardonmax.Application.Abstractions
+@using Lab13sardonmax.Application.Reportes
+@inject IQueryHandler<ObtenerTicketsQuery, IReadOnlyList<TicketReporteDto>> TicketsHandler
+@inject IQueryHandler<ObtenerActividadUsuariosQuery, IReadOnlyList<ActividadUsuarioReporteDto>> UsuariosHandler
+
+<PageTitle>LAB 13 | TicketeraBD</PageTitle>
+
+<section class="hero-lab">
+    <div>
+        <span class="etiqueta">EJERCICIO DE APLICACION | TICKETERA BD</span>
+        <h1>Laboratorio 13</h1>
+        <p>
+            Dos reportes Excel generados desde la base de datos del laboratorio 9,
+            aplicando repositorios, consultas CQRS, ClosedXML y API REST con Swagger.
+        </p>
+        <div class="acciones">
+            <a class="btn btn-light btn-lg" href="/api/reportes/tickets/excel">
+                Descargar tickets
+            </a>
+            <a class="btn btn-outline-light btn-lg" href="/api/reportes/usuarios/excel">
+                Descargar actividad
+            </a>
+            <a class="btn btn-link text-white" href="/swagger" target="_blank">
+                Abrir Swagger
+            </a>
+        </div>
+    </div>
+    <div class="excel-icono">XLSX</div>
+</section>
+
+@if (cargando)
+{
+    <div class="alert alert-info mt-4">Consultando la base de datos TicketeraBD...</div>
+}
+else
+{
+    <section class="indicadores">
+        <article>
+            <span>Total de tickets</span>
+            <strong>@tickets.Count</strong>
+            <small>registros encontrados</small>
+        </article>
+        <article>
+            <span>Tickets abiertos</span>
+            <strong>@tickets.Count(ticket => ticket.Estado == "abierto")</strong>
+            <small>requieren atencion</small>
+        </article>
+        <article>
+            <span>Tickets cerrados</span>
+            <strong>@tickets.Count(ticket => ticket.Estado == "cerrado")</strong>
+            <small>casos solucionados</small>
+        </article>
+        <article>
+            <span>Usuarios y respuestas</span>
+            <strong>@usuarios.Count / @tickets.Sum(ticket => ticket.TotalRespuestas)</strong>
+            <small>usuarios / respuestas</small>
+        </article>
+    </section>
+
+    <section class="panel-reporte">
+        <div class="panel-encabezado">
+            <div>
+                <span class="numero-reporte">REPORTE 01</span>
+                <h2>Reporte general de tickets</h2>
+                <p>Relaciona tickets, usuarios y respuestas mediante el repositorio de tickets.</p>
+            </div>
+            <a class="btn btn-success" href="/api/reportes/tickets/excel">Generar Excel</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Titulo</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                    <th>Creacion</th>
+                    <th class="text-center">Respuestas</th>
+                    <th class="text-end">Horas</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var ticket in tickets)
+                {
+                    <tr>
+                        <td><code>@ticket.Codigo</code></td>
+                        <td>@ticket.Titulo</td>
+                        <td>@ticket.Usuario</td>
+                        <td><span class="badge-categoria">@ticket.Estado.Replace("_", " ")</span></td>
+                        <td>@ticket.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-center">@ticket.TotalRespuestas</td>
+                        <td class="text-end">@ticket.HorasAtencion.ToString("N1")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel-reporte">
+        <div class="panel-encabezado">
+            <div>
+                <span class="numero-reporte">REPORTE 02</span>
+                <h2>Actividad de usuarios</h2>
+                <p>Resume roles, tickets creados, respuestas realizadas y tickets cerrados.</p>
+            </div>
+            <a class="btn btn-success" href="/api/reportes/usuarios/excel">Generar Excel</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th class="text-center">Tickets</th>
+                    <th class="text-center">Respuestas</th>
+                    <th class="text-center">Cerrados</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var usuario in usuarios)
+                {
+                    <tr>
+                        <td class="fw-semibold">@usuario.Usuario</td>
+                        <td>@usuario.Correo</td>
+                        <td><span class="badge-categoria">@usuario.Roles</span></td>
+                        <td class="text-center">@usuario.TicketsCreados</td>
+                        <td class="text-center">@usuario.RespuestasRealizadas</td>
+                        <td class="text-center">@usuario.TicketsCerrados</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel-reporte">
+        <div class="panel-encabezado">
+            <div>
+                <span class="numero-reporte">PARTE 3</span>
+                <h2>Modificar un archivo Excel existente</h2>
+                <p>
+                    Selecciona un archivo <code>.xlsx</code>. ClosedXML cambiara la celda
+                    <code>B2</code> al valor <strong>30</strong> y descargara una copia.
+                </p>
+            </div>
+        </div>
+        <form class="formulario-excel"
+              action="/api/reportes/modificar-excel"
+              method="post"
+              enctype="multipart/form-data">
+            <div>
+                <label for="archivoExcel" class="form-label fw-semibold">Archivo Excel existente</label>
+                <input id="archivoExcel" class="form-control" type="file"
+                       name="archivo" accept=".xlsx" required />
+            </div>
+            <button class="btn btn-primary" type="submit">Modificar B2 y descargar</button>
+        </form>
+    </section>
+
+    <section class="arquitectura">
+        <h2>Buenas practicas aplicadas</h2>
+        <div class="arquitectura-grid">
+            <div><strong>Dominio</strong><span>Roles, usuarios, tickets y respuestas</span></div>
+            <div><strong>Repositorio</strong><span>Acceso a datos separado de la aplicacion</span></div>
+            <div><strong>CQRS</strong><span>Una consulta y handler por cada reporte</span></div>
+            <div><strong>Presentacion</strong><span>Blazor, API REST, Swagger y Excel</span></div>
+        </div>
+    </section>
+}
+
+@code {
+    private IReadOnlyList<TicketReporteDto> tickets = [];
+    private IReadOnlyList<ActividadUsuarioReporteDto> usuarios = [];
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await TicketsHandler.HandleAsync(new ObtenerTicketsQuery());
+        usuarios = await UsuariosHandler.HandleAsync(new ObtenerActividadUsuariosQuery());
+        cargando = false;
+    }
+}

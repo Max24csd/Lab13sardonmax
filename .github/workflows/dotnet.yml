@@ -1,0 +1,47 @@
+name: Compilar, probar y publicar .NET
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  construir:
+    name: Compilacion y pruebas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restaurar dependencias
+        run: dotnet restore Lab13sardonmax.sln
+
+      - name: Compilar en Release
+        run: dotnet build Lab13sardonmax.sln --configuration Release --no-restore
+
+      - name: Ejecutar pruebas
+        run: dotnet test Lab13sardonmax.sln --configuration Release --no-build
+
+      - name: Publicar aplicacion
+        run: dotnet publish Lab13sardonmax/Lab13sardonmax.csproj --configuration Release --no-build --output ./publicado
+
+      - name: Guardar archivos publicados
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab13sardonmax-publicado
+          path: ./publicado
+          if-no-files-found: error
+          retention-days: 7

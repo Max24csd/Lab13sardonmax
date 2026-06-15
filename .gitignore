@@ -1,0 +1,9 @@
+.idea/
+**/bin/
+**/obj/
+**/publish/
+publicado/
+*.user
+*.suo
+*.db
+TestResults/

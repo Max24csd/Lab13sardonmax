@@ -1,0 +1,240 @@
+.hero-lab {
+    align-items: center;
+    background: linear-gradient(135deg, #083344 0%, #0f766e 55%, #14b8a6 100%);
+    border-radius: 24px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    min-height: 330px;
+    overflow: hidden;
+    padding: 3rem;
+    position: relative;
+}
+
+.hero-lab::after {
+    background: rgba(255, 255, 255, .08);
+    border-radius: 50%;
+    content: "";
+    height: 360px;
+    position: absolute;
+    right: -100px;
+    top: -120px;
+    width: 360px;
+}
+
+.hero-lab > div:first-child {
+    max-width: 760px;
+    position: relative;
+    z-index: 1;
+}
+
+.etiqueta, .numero-reporte {
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
+
+.hero-lab h1 {
+    font-size: clamp(2.7rem, 6vw, 5.4rem);
+    font-weight: 800;
+    letter-spacing: -.05em;
+    margin: .4rem 0 .8rem;
+}
+
+.hero-lab p {
+    color: #ccfbf1;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 680px;
+}
+
+.acciones {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: 1.7rem;
+}
+
+.excel-icono {
+    align-items: center;
+    background: rgba(255, 255, 255, .15);
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 22px;
+    display: flex;
+    font-size: 1.7rem;
+    font-weight: 900;
+    height: 150px;
+    justify-content: center;
+    letter-spacing: .08em;
+    margin-left: 2rem;
+    min-width: 150px;
+    position: relative;
+    transform: rotate(5deg);
+    z-index: 1;
+}
+
+.indicadores {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 1.5rem 0;
+}
+
+.indicadores article {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+    padding: 1.25rem;
+}
+
+.indicadores span, .indicadores small {
+    color: #64748b;
+    display: block;
+}
+
+.indicadores strong {
+    color: #0f172a;
+    display: block;
+    font-size: 1.65rem;
+    margin: .35rem 0;
+}
+
+.panel-reporte {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .05);
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+.panel-encabezado {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1.5rem;
+}
+
+.panel-encabezado h2 {
+    color: #0f172a;
+    font-size: 1.45rem;
+    margin: .25rem 0;
+}
+
+.panel-encabezado p {
+    color: #64748b;
+    margin: 0;
+}
+
+.numero-reporte {
+    color: #0f766e;
+}
+
+.panel-reporte table {
+    margin: 0;
+}
+
+.panel-reporte thead th {
+    background: #f0fdfa;
+    border-bottom-color: #99f6e4;
+    color: #115e59;
+    font-size: .8rem;
+    letter-spacing: .04em;
+    padding: .9rem 1.5rem;
+    text-transform: uppercase;
+}
+
+.panel-reporte tbody td {
+    padding: .9rem 1.5rem;
+}
+
+.badge-categoria {
+    background: #ecfeff;
+    border-radius: 999px;
+    color: #0e7490;
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .3rem .65rem;
+}
+
+.formulario-excel {
+    align-items: end;
+    border-top: 1px solid #e2e8f0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr auto;
+    padding: 1.5rem;
+}
+
+.formulario-excel small {
+    display: block;
+    margin-top: .5rem;
+}
+
+.arquitectura {
+    background: #0f172a;
+    border-radius: 20px;
+    color: white;
+    margin: 1.5rem 0 2rem;
+    padding: 2rem;
+}
+
+.arquitectura h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.arquitectura-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.arquitectura-grid div {
+    border-left: 3px solid #2dd4bf;
+    padding-left: 1rem;
+}
+
+.arquitectura-grid strong, .arquitectura-grid span {
+    display: block;
+}
+
+.arquitectura-grid span {
+    color: #94a3b8;
+    font-size: .9rem;
+    margin-top: .25rem;
+}
+
+@media (max-width: 1000px) {
+    .indicadores, .arquitectura-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .excel-icono {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-lab {
+        padding: 2rem 1.25rem;
+    }
+
+    .indicadores, .arquitectura-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .formulario-excel {
+        align-items: stretch;
+        grid-template-columns: 1fr;
+    }
+}
