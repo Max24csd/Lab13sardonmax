@@ -6,4 +6,6 @@ publicado/
 *.user
 *.suo
 *.db
+*.db-shm
+*.db-wal
 TestResults/
